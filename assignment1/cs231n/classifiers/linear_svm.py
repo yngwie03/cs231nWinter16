@@ -22,21 +22,32 @@ def svm_loss_naive(W, X, y, reg):
   dW = np.zeros(W.shape) # initialize the gradient as zero
 
   # compute the loss and the gradient
+  #10
   num_classes = W.shape[1]
+  #500
   num_train = X.shape[0]
   loss = 0.0
-  lossMatrix = np.zeros((num_train , num_classes))   
+  lossMatrix = np.zeros((num_train,num_classes))   
   for i in xrange(num_train):
+    # X : 500 X 3073 W: 3073 x 10 -> 1x3073 dot 3073x10 = 1x10       
     scores = X[i].dot(W)
+    
     correct_class_score = scores[y[i]]
     for j in xrange(num_classes):
       if j == y[i]:
-        lossMatrix[i,j] = 0
         continue
-      margin = scores[j] - correct_class_score + 1 # note delta = 1
-      lossMatrix[i,j] = (-1) * margin
+      margin = scores[j] - correct_class_score + 1 # note delta = 1  
+      
       if margin > 0:
         loss += margin
+        lossMatrix[i,j]= 1        
+      else:
+        lossMatrix[i,j]= 0
+        
+    lossMatrix[i,y[i]] = (-1)*(np.sum(lossMatrix[i,:]))
+        
+        
+   
 
   # Right now the loss is a sum over all training examples, but we want it
   # to be an average instead so we divide by num_train.
@@ -53,7 +64,7 @@ def svm_loss_naive(W, X, y, reg):
   # loss is being computed. As a result you may need to modify some of the    #
   # code above to compute the gradient.                                       #
   #############################################################################
-  dW = (X.T).dot(lossMatrix) + 0.5 * reg * W * W
+  dW = (X.T).dot(lossMatrix)/num_train + reg * W  
 
   return loss, dW
 

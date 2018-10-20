@@ -41,8 +41,7 @@ def svm_loss_naive(W, X, y, reg):
       if margin > 0:
         loss += margin
         lossMatrix[i,j]= 1        
-      else:
-        lossMatrix[i,j]= 0
+     
         
     lossMatrix[i,y[i]] = (-1)*(np.sum(lossMatrix[i,:]))
         
@@ -64,7 +63,7 @@ def svm_loss_naive(W, X, y, reg):
   # loss is being computed. As a result you may need to modify some of the    #
   # code above to compute the gradient.                                       #
   #############################################################################
-  dW = (X.T).dot(lossMatrix)/num_train + reg * W  
+  dW = (X.T).dot(lossMatrix)/num_train  + reg * W 
 
   return loss, dW
 

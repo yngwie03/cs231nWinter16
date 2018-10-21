@@ -37,7 +37,7 @@ def svm_loss_naive(W, X, y, reg):
     #print(scores[y[i]])
     #print(i)
     #print(scores[y[i]])
-    loss_temp = 0.0
+    #loss_temp = 0.0
     for j in xrange(num_classes):
       #print(j)        
       if j == y[i]:
@@ -47,7 +47,7 @@ def svm_loss_naive(W, X, y, reg):
              
       if margin > 0:
         loss += margin
-        loss_temp += 1
+        #loss_temp += 1
         #lossMatrix[i,j]= 1
         dW[:,j] += X[i,:].T
         dW[:,y[i]] += (-1) * X[i,:].T 

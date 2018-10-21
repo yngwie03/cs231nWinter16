@@ -49,8 +49,8 @@ def svm_loss_naive(W, X, y, reg):
         dW[:,j] += X[i,:]
          
         
-    lossMatrix[i,y[i]] = (-1)*(np.sum(lossMatrix[i,:]))
-    dW[:,y[i]] += lossMatrix[i,y[i]]* X[i,:]   
+    #lossMatrix[i,y[i]] = (-1)*(np.sum(lossMatrix[i,:]))
+    dW[:,y[i]] += (-1)*(np.sum(lossMatrix[i,:]))* X[i,:]   
         
    
 

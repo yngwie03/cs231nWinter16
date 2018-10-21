@@ -27,6 +27,7 @@ def svm_loss_naive(W, X, y, reg):
   #500
   num_train = X.shape[0]
   loss = 0.0
+  
   lossMatrix = np.zeros((num_train,num_classes))   
   for i in xrange(num_train):
     # X : 500 X 3073 W: 3073 x 10 -> 1x3073 dot 3073x10 = 1x10       
@@ -36,6 +37,7 @@ def svm_loss_naive(W, X, y, reg):
     #print(scores[y[i]])
     #print(i)
     #print(scores[y[i]])
+    loss_temp = 0.0
     for j in xrange(num_classes):
       #print(j)        
       if j == y[i]:
@@ -45,13 +47,14 @@ def svm_loss_naive(W, X, y, reg):
              
       if margin > 0:
         loss += margin
-        lossMatrix[i,j]= 1
-        dW[:,j] += X[i,:]
-         
+        loss_temp += 1
+        #lossMatrix[i,j]= 1
+        dW[:,j] += X[i,:].T
+        dW[:,y[i]] += (-1) * X[i,:].T 
         
     #lossMatrix[i,y[i]] = (-1)*(np.sum(lossMatrix[i,:]))
-    dW[:,y[i]] += (-1)*(np.sum(lossMatrix[i,:]))* X[i,:]   
-        
+    #dW[:,y[i]] += (-1)*(np.sum(lossMatrix[i,:]))* X[i,:]   
+    #dW[:,y[i]] += (-1) * loss_temp * X[i,:]   
    
 
   # Right now the loss is a sum over all training examples, but we want it

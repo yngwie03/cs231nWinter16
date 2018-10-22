@@ -93,15 +93,16 @@ def svm_loss_vectorized(W, X, y, reg):
   #############################################################################
   y_correct = np.zeros(y.shape[0])
   margin_matrix = np.zeros((X.shape[0] , W.shape[1])) 
-    
+  weight_X_dot =  X.dot(W) 
   #np.choose(select_id, input_array.T)  
   #y_correct = X.dot(W)[np.arange(len(X.dot(W))),y]
-  y_correct = np.choose(y,X.dot(W).T)
+  y_correct = np.choose(y,weight_X_dot.T)
   #(500,)
   #print(y_correct.shape)
   #y_correct.reshape((y_correct.shape[0] , 1))
   
-  margin_matrix = X.dot(W) - np.vstack(y_correct)  + 1
+  #500 x 10
+  margin_matrix = weight_X_dot - np.vstack(y_correct)  + 1
   
   #loss = np.sum(margin_matrix[(margin_matrix > 0) & (margin_matrix != 1)])/ X.shape[0] 
   loss = (np.sum(margin_matrix[(margin_matrix > 0)]) -np.sum(np.choose(y,margin_matrix.T))) /X.shape[0]   
@@ -120,7 +121,11 @@ def svm_loss_vectorized(W, X, y, reg):
   # to reuse some of the intermediate values that you used to compute the     #
   # loss.                                                                     #
   #############################################################################
-  pass
+  margin_matrix[(margin_matrix > 0)] = 1
+  margin_matrix[(margin_matrix <= 0)] = 0
+  np.put(margin_matrix.T,y,(-1) * (np.sum(margin_matrix.T,axis = 0)-1))  
+  print(margin_matrix)
+  dW = X.T.dot(margin_matrix)
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################

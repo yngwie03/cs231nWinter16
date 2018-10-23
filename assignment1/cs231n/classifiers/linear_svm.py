@@ -105,8 +105,8 @@ def svm_loss_vectorized(W, X, y, reg):
   margin_matrix = weight_X_dot - np.vstack(y_correct)  + 1
   
   #loss = np.sum(margin_matrix[(margin_matrix > 0) & (margin_matrix != 1)])/ X.shape[0] 
-  loss = (np.sum(margin_matrix[(margin_matrix > 0)]) -np.sum(np.choose(y,margin_matrix.T))) /X.shape[0] 
-
+  loss = np.sum(margin_matrix[(margin_matrix > 0)]) -np.sum(np.choose(y,margin_matrix.T)) 
+  loss/= X.shape[0] 
   loss += 0.5 * reg * np.sum(W * W)
     
   #############################################################################
@@ -125,15 +125,17 @@ def svm_loss_vectorized(W, X, y, reg):
   #############################################################################
   margin_matrix[(margin_matrix > 0)] = 1
   margin_matrix[(margin_matrix <= 0)] = 0
-  y_index = np.sort(np.arange(500))
+  y_index = np.sort(np.arange(y.shape[0]))
   #y_index=np.vstack((y_index, y)).T
   #print(y_index) 
   #a = np.sum(margin_matrix,axis = 1)-1
   #print(a.shape)  
   margin_matrix[y_index,y]= (-1)* (np.sum(margin_matrix,axis = 1)-1) 
-  
-  print(margin_matrix)
-  dW = X.T.dot(margin_matrix)/X.shape[0] + reg * W
+  #batch_test = margin_matrix[np.random.choice(500 ,10,replace=True),:]
+  #print(batch_test)
+  #print(margin_matrix)
+  dW = X.T.dot(margin_matrix)
+  dW = dW/X.shape[0] + reg * W
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################

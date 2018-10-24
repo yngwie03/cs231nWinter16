@@ -96,7 +96,7 @@ class LinearClassifier(object):
     # Implement this method. Store the predicted labels in y_pred.            #
     ###########################################################################
     y_pred = np.argmax(X.dot(self.W),axis = 1)
-   
+    #y_pred = X.dot(self.W).argmax(axis=1)
     #print(y_pred.shape)
     ###########################################################################
     #                           END OF YOUR CODE                              #
@@ -125,7 +125,7 @@ class LinearSVM(LinearClassifier):
 
   def loss(self, X_batch, y_batch, reg):
     return svm_loss_vectorized(self.W, X_batch, y_batch, reg)
-
+    #return svm_loss_naive(self.W, X_batch, y_batch, reg)
 
 class Softmax(LinearClassifier):
   """ A subclass that uses the Softmax + Cross-entropy loss function """

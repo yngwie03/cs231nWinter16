@@ -51,9 +51,11 @@ class LinearClassifier(object):
       # Hint: Use np.random.choice to generate indices. Sampling with         #
       # replacement is faster than sampling without replacement.              #
       #########################################################################
-      X_batch = X[np.random.choice(num_train ,batch_size, replace = True),:]
-      #print(x_batch.shape)
-      y_batch = y[np.random.choice(num_train , batch_size, replace = True)]  
+
+      idx = np.random.choice(num_train, batch_size, replace=True)
+      X_batch = X[idx]
+      #print(X_batch.shape)
+      y_batch = y[idx]  
       #########################################################################
       #                       END OF YOUR CODE                                #
       #########################################################################

@@ -77,7 +77,12 @@ def softmax_loss_vectorized(W, X, y, reg):
   # here, it is easy to run into numeric instability. Don't forget the        #
   # regularization!                                                           #
   #############################################################################
-  pass
+  #500 x 10
+  weight_X_dot =  np.exp(X.dot(W)) 
+  normalize = np.sum(weight_X_dot, axis=0)
+  prob_scores = weight_X_dot/normalize[:,None] 
+  
+    
   #############################################################################
   #                          END OF YOUR CODE                                 #
   #############################################################################

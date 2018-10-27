@@ -38,7 +38,8 @@ def softmax_loss_naive(W, X, y, reg):
     scores =np.exp( X[i].dot(W))
     normalize = np.sum(scores)
     prob_scores = scores/normalize  
-    loss_scores = (-1) * (np.log(scores/normalize) )  
+    #print(np.sum(prob_scores))
+    loss_scores = (-1) * (np.log(prob_scores) )  
   
   
     for j in xrange(num_class):
@@ -77,10 +78,27 @@ def softmax_loss_vectorized(W, X, y, reg):
   # here, it is easy to run into numeric instability. Don't forget the        #
   # regularization!                                                           #
   #############################################################################
+  num_train = X.shape[0]
+  num_class = W.shape[1]
+  num_dim =  W.shape[0]
+  
   #500 x 10
   weight_X_dot =  np.exp(X.dot(W)) 
-  normalize = np.sum(weight_X_dot, axis=0)
-  prob_scores = weight_X_dot/normalize[:,None] 
+  
+  normalize = np.sum(weight_X_dot, axis=1)
+  #prob_scores = weight_X_dot/normalize[:,None]
+  #prob_scores = (weight_X_dot.T/weight_X_dot.sum(axis=1)).T
+  prob_scores  = weight_X_dot / np.sum(weight_X_dot, axis=1, keepdims=True)  
+  
+  loss_scores = (-1) * (np.log(prob_scores)) 
+  
+  loss = np.sum(loss_scores[np.arange(loss_scores.shape[0]), y] )
+  loss /= num_train
+  loss += 0.5 * reg * np.sum(W * W) 
+  prob_scores[np.arange(prob_scores.shape[0]), y] -= 1
+  dW = X.T.dot(prob_scores) 
+  dW /= num_train
+  dW += reg * W  
   
     
   #############################################################################

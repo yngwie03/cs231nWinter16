@@ -35,7 +35,9 @@ def softmax_loss_naive(W, X, y, reg):
  
   
   for i in xrange(num_train):
-    scores =np.exp( X[i].dot(W))
+    f = X[i].dot(W)  
+    f -= np.max(f)
+    scores =np.exp(f)
     normalize = np.sum(scores)
     prob_scores = scores/normalize  
     #print(np.sum(prob_scores))
@@ -82,15 +84,29 @@ def softmax_loss_vectorized(W, X, y, reg):
   num_class = W.shape[1]
   num_dim =  W.shape[0]
   
+  f = X.dot(W)
+  
+  c = (-1) * np.max(f,axis = 1)
+   
+  f += c[:,np.newaxis]
+
+ 
+  
   #500 x 10
-  weight_X_dot =  np.exp(X.dot(W)) 
+ 
+ 
+  weight_X_dot =  np.exp(f) 
   
   normalize = np.sum(weight_X_dot, axis=1)
+  
+   
   #prob_scores = weight_X_dot/normalize[:,None]
   #prob_scores = (weight_X_dot.T/weight_X_dot.sum(axis=1)).T
-  prob_scores  = weight_X_dot / np.sum(weight_X_dot, axis=1, keepdims=True)  
+  prob_scores  =  weight_X_dot  /  np.sum(weight_X_dot, axis=1, keepdims=True)   
   
-  loss_scores = (-1) * (np.log(prob_scores)) 
+  #loss_scores = (-1) * (np.log(weight_X_dot) - np.log(np.sum(weight_X_dot, axis=1, keepdims=True) )) 
+    
+  loss_scores = (-1) * (f - np.log(np.sum(weight_X_dot, axis=1, keepdims=True) ))   
   
   loss = np.sum(loss_scores[np.arange(loss_scores.shape[0]), y] )
   loss /= num_train

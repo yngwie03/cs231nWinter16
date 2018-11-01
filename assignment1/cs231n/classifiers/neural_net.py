@@ -75,7 +75,7 @@ class TwoLayerNet(object):
     # shape (N, C).                                                             #
     #############################################################################
     
-    hidden_layer_score = X.dot(W1) + b1[np.newaxis,:]
+    hidden_layer_score = np.maximum(0,X.dot(W1) + b1[np.newaxis,:])
     scores = hidden_layer_score.dot(W2)+ b2[np.newaxis,:]
     #############################################################################
     #                              END OF YOUR CODE                             #
@@ -117,7 +117,7 @@ class TwoLayerNet(object):
     loss += 0.5 * reg * np.sum(W1* W1) 
     loss += 0.5 * reg * np.sum(W2* W2) 
    
-  
+    #print(loss)
     
     #############################################################################
     #                              END OF YOUR CODE                             #

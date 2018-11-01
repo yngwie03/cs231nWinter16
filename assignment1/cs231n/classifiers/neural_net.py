@@ -74,7 +74,9 @@ class TwoLayerNet(object):
     # Store the result in the scores variable, which should be an array of      #
     # shape (N, C).                                                             #
     #############################################################################
-    pass
+    
+    hidden_layer_score = X.dot(W1) + b1[np.newaxis,:]
+    scores = hidden_layer_score.dot(W2)+ b2[np.newaxis,:]
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################
@@ -92,7 +94,31 @@ class TwoLayerNet(object):
     # classifier loss. So that your results match ours, multiply the            #
     # regularization loss by 0.5                                                #
     #############################################################################
-    pass
+    num_train = X.shape[0]
+    num_dim , num_class = W1.shape
+    hidden_layer_dim,  hidden_layer_class = W2.shape
+    
+    f = scores
+  
+    c = (-1) * np.max(f,axis = 1)
+   
+    f += c[:,np.newaxis]
+    
+    weight_X_dot =  np.exp(f) 
+  
+    normalize = np.sum(weight_X_dot, axis=1)
+    
+    prob_scores  =  weight_X_dot  /  np.sum(weight_X_dot, axis=1, keepdims=True)    
+    
+    loss_scores = (-1) * (f - np.log(np.sum(weight_X_dot, axis=1, keepdims=True) ))  
+    
+    loss = np.sum(loss_scores[np.arange(loss_scores.shape[0]), y] )
+    loss /= num_train
+    loss += 0.5 * reg * np.sum(W1* W1) 
+    loss += 0.5 * reg * np.sum(W2* W2) 
+   
+  
+    
     #############################################################################
     #                              END OF YOUR CODE                             #
     #############################################################################

@@ -99,19 +99,16 @@ class TwoLayerNet(object):
     num_dim , num_class = W1.shape
     hidden_layer_dim,  hidden_layer_class = W2.shape
     
-    f = scores
-  
-    c = (-1) * np.max(f,axis = 1)
-    #column array
-    f += c[:,np.newaxis]
+    c = (-1) * np.max(scores ,axis = 1)
+    #column array, avoid numeric instability
+    scores += c[:,np.newaxis]
     
-    weight_X_dot =  np.exp(f) 
+    exp_scores =  np.exp(scores) 
   
-    normalize = np.sum(weight_X_dot, axis=1)
     #N X C
-    prob_scores  =  weight_X_dot  /  np.sum(weight_X_dot, axis=1, keepdims=True)    
+    prob_scores  =  exp_scores  /  np.sum(exp_scores, axis=1, keepdims=True)    
     
-    loss_scores = (-1) * (f - np.log(np.sum(weight_X_dot, axis=1, keepdims=True) ))  
+    loss_scores = (-1) * (scores - np.log(np.sum(exp_scores, axis=1, keepdims=True) ))  
     
     loss = np.sum(loss_scores[np.arange(loss_scores.shape[0]), y] )
     loss /= num_train
@@ -139,16 +136,18 @@ class TwoLayerNet(object):
    
     # H x N
     dW2 = np.dot(hidden_layer_scores.T,dscores)
+    dhidden_layer_scores = np.dot(dscores , W2.T,)
+    dW2 += reg * W2
     grads['W2'] = dW2
     db2 = np.sum(dscores, axis=0,keepdims=True)
     grads['b2'] = db2
-    dhidden_layer = np.dot(dscores , W2.T)
+   
+    dhidden_layer_scores[hidden_layer_scores <= 0] = 0
     
-    dhidden_layer[hidden_layer_scores < 0] = 0
-    
-    dW1 = np.dot( X.T,dhidden_layer)
+    dW1 = np.dot( X.T,dhidden_layer_scores)
+    dW1 += reg * W1
     grads['W1'] = dW1
-    db1 = np.sum(dW1, axis=0,keepdims=True)
+    db1 = np.sum(dhidden_layer_scores, axis=0,keepdims=True)
     grads['b1'] = db1
   
     #############################################################################

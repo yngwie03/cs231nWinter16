@@ -141,7 +141,7 @@ class TwoLayerNet(object):
     grads['W2'] = dW2
     db2 = np.sum(dscores, axis=0,keepdims=True)
     grads['b2'] = db2
-   
+    #relu  
     dhidden_layer_scores[hidden_layer_scores <= 0] = 0
     
     dW1 = np.dot( X.T,dhidden_layer_scores)

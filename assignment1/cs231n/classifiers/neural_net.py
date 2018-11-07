@@ -260,7 +260,11 @@ class TwoLayerNet(object):
     ###########################################################################
     # TODO: Implement this function; it should be VERY simple!                #
     ###########################################################################
-    pass
+     # N x D dot D x H = N x H 
+    hidden_layer_scores = np.maximum(0,X.dot(self.params['W1']) + self.params['b1'][np.newaxis,:])
+    # N x H dot H x C = N x C
+    scores = hidden_layer_scores.dot(self.params['W2'])+ self.params['b2'][np.newaxis,:]
+    y_pred = np.argmax(scores,axis = 1)
     ###########################################################################
     #                              END OF YOUR CODE                           #
     ###########################################################################

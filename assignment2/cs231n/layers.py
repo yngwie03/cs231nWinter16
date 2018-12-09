@@ -28,8 +28,9 @@ def affine_forward(x, w, b):
   # w : (120,3)
   reshapeX = np.zeros((x.shape[0] , np.prod(x.shape)/x.shape[0]))            
   for i in xrange(x.shape[0]):  
-    reshapeX[i] = np.ravel(x[i])
-  out = reshapeX.dot(w) + b
+    #reshapeX[i] = np.ravel(x[i])
+    reshapeX[i] = x[i].reshape(-1)
+  out = np.dot(reshapeX,w) + b
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
@@ -59,13 +60,18 @@ def affine_backward(dout, cache):
   #############################################################################
   #(N,M).(M,D) = (N,D)
   
-  dx = dout.dot(w.T)
-  dx = np.reshape(dx,x.shape)
+  #dx = dout.dot(w.T)
+  dx = np.dot(dout,w.T) 
+  #dx = np.reshape(dx,x.shape)
+  dx = dx.reshape(x.shape)
+ 
   #(D,N).(N,M) = (D,M) 
   reshapeX = np.zeros((x.shape[0] , np.prod(x.shape)/x.shape[0]))            
   for i in xrange(x.shape[0]):  
-    reshapeX[i] = np.ravel(x[i])
-  dw = (reshapeX).T.dot(dout) 
+    #reshapeX[i] = np.ravel(x[i])
+    reshapeX[i] = x[i].reshape(-1)
+  #dw = (reshapeX).T.dot(dout)
+  dw = np.dot(reshapeX.T,dout)
   db = np.sum(dout, axis=0,keepdims=True)
   #############################################################################
   #                             END OF YOUR CODE                              #

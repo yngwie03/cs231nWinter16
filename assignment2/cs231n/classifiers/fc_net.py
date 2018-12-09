@@ -110,9 +110,11 @@ class TwoLayerNet(object):
     grads['W2'] = dW2
     grads['b2'] = db2
     dx, dW1, db1 = affine_relu_backward(dhidden_layer,cache_layer1)
+    dW1 = dW1.reshape(W1.shape)
     dW1 += reg * W1
     grads['W1'] = dW1
     grads['b1'] = db1
+
     ############################################################################
     #                             END OF YOUR CODE                             #
     ############################################################################

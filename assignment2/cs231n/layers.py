@@ -26,10 +26,12 @@ def affine_forward(x, w, b):
   #############################################################################
   # D : (2,120)
   # w : (120,3)
+   
   reshapeX = np.zeros((x.shape[0] , np.prod(x.shape)/x.shape[0]))            
   for i in xrange(x.shape[0]):  
     #reshapeX[i] = np.ravel(x[i])
     reshapeX[i] = x[i].reshape(-1)
+  
   out = np.dot(reshapeX,w) + b
   #############################################################################
   #                             END OF YOUR CODE                              #
@@ -62,8 +64,8 @@ def affine_backward(dout, cache):
   
   #dx = dout.dot(w.T)
   dx = np.dot(dout,w.T) 
-  #dx = np.reshape(dx,x.shape)
-  dx = dx.reshape(x.shape)
+  dx = np.reshape(dx,x.shape)
+  #dx = dx.reshape(x.shape)
  
   #(D,N).(N,M) = (D,M) 
   reshapeX = np.zeros((x.shape[0] , np.prod(x.shape)/x.shape[0]))            
@@ -72,7 +74,7 @@ def affine_backward(dout, cache):
     reshapeX[i] = x[i].reshape(-1)
   #dw = (reshapeX).T.dot(dout)
   dw = np.dot(reshapeX.T,dout)
-  db = np.sum(dout, axis=0,keepdims=True)
+  db = np.sum(dout, axis=0)
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
@@ -117,8 +119,9 @@ def relu_backward(dout, cache):
   #############################################################################
   # TODO: Implement the ReLU backward pass.                                   #
   #############################################################################
-  dout[x <= 0] =0
-  dx = dout   
+  #dout[x <= 0] =0
+  #dx = dout
+  dx = ( x > 0 ) * dout
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################

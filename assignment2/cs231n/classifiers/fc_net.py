@@ -45,9 +45,13 @@ class TwoLayerNet(object):
     # weights and biases using the keys 'W1' and 'b1' and second layer weights #
     # and biases using the keys 'W2' and 'b2'.                                 #
     ############################################################################
-    self.params['W1'] = weight_scale * np.random.randn(input_dim, hidden_dim)
+    #self.params['W1'] = weight_scale * np.random.randn(input_dim, hidden_dim)
+    #self.params['b1'] = np.zeros(hidden_dim)
+    #self.params['W2'] = weight_scale * np.random.randn(hidden_dim, num_classes)
+    #self.params['b2'] = np.zeros(num_classes)
+    self.params['W1'] = np.random.normal(0, weight_scale, (input_dim, hidden_dim))
     self.params['b1'] = np.zeros(hidden_dim)
-    self.params['W2'] = weight_scale * np.random.randn(hidden_dim, num_classes)
+    self.params['W2'] = np.random.normal(0, weight_scale, (hidden_dim, num_classes))
     self.params['b2'] = np.zeros(num_classes)
     ############################################################################
     #                             END OF YOUR CODE                             #
@@ -110,7 +114,6 @@ class TwoLayerNet(object):
     grads['W2'] = dW2
     grads['b2'] = db2
     dx, dW1, db1 = affine_relu_backward(dhidden_layer,cache_layer1)
-    dW1 = dW1.reshape(W1.shape)
     dW1 += reg * W1
     grads['W1'] = dW1
     grads['b1'] = db1

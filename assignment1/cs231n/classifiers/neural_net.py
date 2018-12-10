@@ -139,7 +139,7 @@ class TwoLayerNet(object):
     dhidden_layer_scores = np.dot(dscores , W2.T,)
     dW2 += reg * W2
     grads['W2'] = dW2
-    db2 = np.sum(dscores, axis=0,keepdims=True)
+    db2 = np.sum(dscores, axis=0)
     grads['b2'] = db2
     #relu  
     dhidden_layer_scores[hidden_layer_scores <= 0] = 0
@@ -147,7 +147,7 @@ class TwoLayerNet(object):
     dW1 = np.dot( X.T,dhidden_layer_scores)
     dW1 += reg * W1
     grads['W1'] = dW1
-    db1 = np.sum(dhidden_layer_scores, axis=0,keepdims=True)
+    db1 = np.sum(dhidden_layer_scores, axis=0)
     grads['b1'] = db1
     #print(grads['b1'].shape)
   
@@ -214,8 +214,8 @@ class TwoLayerNet(object):
       #########################################################################
       self.params['W1'] += (-1) * learning_rate * grads['W1']
       self.params['W2'] += (-1) * learning_rate * grads['W2']
-      self.params['b1'] += (-1) * learning_rate * grads['b1'].reshape(self.params['b1'].shape)
-      self.params['b2'] += (-1) * learning_rate * grads['b2'].reshape(self.params['b2'].shape)  
+      self.params['b1'] += (-1) * learning_rate * grads['b1']
+      self.params['b2'] += (-1) * learning_rate * grads['b2']  
       #########################################################################
       #                             END OF YOUR CODE                          #
       #########################################################################
